@@ -21,6 +21,12 @@
 </head>
 <body>
   <h2 style="text-align:center;">基金实时估值（每5分钟自动刷新）</h2>
+  <p>
+    <?php
+    date_default_timezone_set('Asia/Shanghai'); // 设置时区
+    echo date('Y-m-d H:i:s'); // 输出当前时间
+    ?>
+  </p> 
   <table id="fundTable">
     <thead>
       <tr>
