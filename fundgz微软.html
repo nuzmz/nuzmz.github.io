@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>基金数据展示</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 90%;
+      margin: 20px auto;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h2 style="text-align:center;">基金实时估值（每5分钟自动刷新）</h2>
+  <table id="fundTable">
+    <thead>
+      <tr>
+        <th>基金代码</th>
+        <th>基金名称</th>
+        <th>单位净值</th>
+        <th>净值日期</th>
+        <th>估算净值</th>
+        <th>估算涨幅</th>
+        <th>估算时间</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const fundCodes = ['110022', '005827', '163406', '007119'];
+
+    function loadFundData() {
+      // 清空旧数据
+      document.querySelector('#fundTable tbody').innerHTML = '';
+
+      // 加载新数据
+      fundCodes.forEach(code => {
+        const script = document.createElement('script');
+        script.src = `https://fundgz.1234567.com.cn/js/${code}.js`;
+        document.body.appendChild(script);
+      });
+    }
+
+    function jsonpgz(data) {
+      const table = document.querySelector('#fundTable tbody');
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${data.fundcode}</td>
+        <td>${data.name}</td>
+        <td>${data.dwjz}</td>
+        <td>${data.jzrq}</td>
+        <td>${data.gsz}</td>
+        <td style="color:${parseFloat(data.gszzl) >= 0 ? 'green' : 'red'}">${data.gszzl}%</td>
+        <td>${data.gztime}</td>
+      `;
+      table.appendChild(row);
+    }
+
+    // 初次加载
+    loadFundData();
+
+    // 每5分钟刷新一次（300000 毫秒）
+    setInterval(loadFundData, 300000);
+  </script>
+</body>
+</html>
